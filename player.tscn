@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cwudqfw3mu538"]
+[gd_scene load_steps=14 format=3 uid="uid://cwudqfw3mu538"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_k02mk"]
 [ext_resource type="Texture2D" uid="uid://bwwuwyyh850l5" path="res://assets/knight_f_idle_anim_f0.png" id="2_4l3c1"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://sc4icrnxmr3m" path="res://assets/knight_f_run_anim_f1.png" id="7_bub38"]
 [ext_resource type="Texture2D" uid="uid://dfgkq58bkrcbh" path="res://assets/knight_f_run_anim_f2.png" id="8_w51gf"]
 [ext_resource type="Texture2D" uid="uid://cabh6beab10rq" path="res://assets/knight_f_run_anim_f3.png" id="9_hyawl"]
+[ext_resource type="Texture2D" uid="uid://bdfpqjt4xm384" path="res://assets/weapon_regular_sword.png" id="10_u4imy"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_dyc3l"]
 animations = [{
@@ -48,7 +49,10 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_48xwm"]
-size = Vector2(16, 24)
+size = Vector2(8, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bq6pj"]
+size = Vector2(8, 22)
 
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(0, -4)
@@ -59,8 +63,31 @@ script = ExtResource("1_k02mk")
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_dyc3l")
 animation = &"run"
+frame_progress = 0.678854
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 4)
+position = Vector2(0, 8)
 scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_48xwm")
+
+[node name="Weapon" type="Node2D" parent="."]
+
+[node name="Area2D" type="Area2D" parent="Weapon"]
+position = Vector2(12, 12)
+
+[node name="Sprite2D" type="Sprite2D" parent="Weapon/Area2D"]
+z_index = -1
+position = Vector2(0, -6)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("10_u4imy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Weapon/Area2D"]
+position = Vector2(0, -11)
+shape = SubResource("RectangleShape2D_bq6pj")
+
+[node name="AttackTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="AttackCooldownTimer" type="Timer" parent="."]
+one_shot = true
