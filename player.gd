@@ -1,6 +1,9 @@
 extends CharacterBody2D
 
-@export var speed = 1000
+@export var speed = 500
+
+func _ready():
+	$AnimatedSprite2D.play()
 
 func _physics_process(delta):
 	var direction = Vector2.ZERO
@@ -18,5 +21,14 @@ func _physics_process(delta):
 		direction = direction.normalized()
 	
 	velocity = direction * speed
+	
+	if not direction:
+		$AnimatedSprite2D.animation = "idle"
+		$AnimatedSprite2D.flip_v = false
+		$AnimatedSprite2D.flip_h = velocity.x < 0
+	else:
+		$AnimatedSprite2D.animation = "run"
+		$AnimatedSprite2D.flip_v = false
+		$AnimatedSprite2D.flip_h = velocity.x < 0
 
 	move_and_slide()
