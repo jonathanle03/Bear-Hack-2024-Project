@@ -1,0 +1,54 @@
+[gd_scene load_steps=9 format=3 uid="uid://bb088rjx1ungi"]
+
+[ext_resource type="Texture2D" uid="uid://b7ce7c4csv4d7" path="res://assets/swampy_anim_f0.png" id="1_0daro"]
+[ext_resource type="Script" path="res://enemy.gd" id="1_aqxdc"]
+[ext_resource type="Texture2D" uid="uid://bfrxqfctaypf" path="res://assets/swampy_anim_f1.png" id="2_hyxrj"]
+[ext_resource type="Texture2D" uid="uid://b75fw87r8sid5" path="res://assets/swampy_anim_f2.png" id="3_u5psp"]
+[ext_resource type="Texture2D" uid="uid://dnib08rd3pj4a" path="res://assets/swampy_anim_f3.png" id="4_e3mer"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lxo4r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_0daro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_hyxrj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_u5psp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_e3mer")
+}],
+"loop": true,
+"name": &"move",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kg6g7"]
+size = Vector2(32, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4svod"]
+radius = 192.0
+
+[node name="Enemy" type="CharacterBody2D"]
+scale = Vector2(2, 2)
+collision_layer = 2
+collision_mask = 7
+script = ExtResource("1_aqxdc")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_lxo4r")
+animation = &"move"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_kg6g7")
+
+[node name="DetectionRadius" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionRadius"]
+shape = SubResource("CircleShape2D_4svod")
+
+[connection signal="body_entered" from="DetectionRadius" to="." method="_on_area_2d_body_entered"]

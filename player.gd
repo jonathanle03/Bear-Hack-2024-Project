@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@export var speed = 500
+@export var move_speed = 25000
 @export var attack_speed = 0.5
 @export var attack_cd = 1
 
@@ -25,7 +25,8 @@ func _physics_process(delta):
 	if direction != Vector2.ZERO:
 		direction = direction.normalized()
 	
-	velocity = direction * speed
+	velocity = direction * delta * move_speed
+	move_and_slide()
 	
 	if not direction:
 		$AnimatedSprite2D.animation = "idle"
@@ -38,11 +39,11 @@ func _physics_process(delta):
 		$AnimatedSprite2D.flip_h = facing_right
 	
 	if facing_right:
-		$Weapon/Area2D.position = Vector2(-12, 12)
+		$Weapon/Area2D.position = Vector2(-12, 14)
 		if not prev_right:
 			$Weapon/Area2D.rotation_degrees *= -1;
 	else:
-		$Weapon/Area2D.position = Vector2(12, 12)
+		$Weapon/Area2D.position = Vector2(12, 14)
 		if prev_right:
 			$Weapon/Area2D.rotation_degrees *= -1;
 	
@@ -71,5 +72,8 @@ func _physics_process(delta):
 		else:
 			$Weapon/Area2D.rotation_degrees -= delta / (attack_cd - attack_speed) * 140
 
-	move_and_slide()
 	prev_right = facing_right
+
+
+func _on_area_2d_body_entered(body):
+	pass # Replace with function body.

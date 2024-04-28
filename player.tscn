@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cwudqfw3mu538"]
+[gd_scene load_steps=15 format=3 uid="uid://cwudqfw3mu538"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_k02mk"]
 [ext_resource type="Texture2D" uid="uid://bwwuwyyh850l5" path="res://assets/knight_f_idle_anim_f0.png" id="2_4l3c1"]
@@ -49,35 +49,41 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_48xwm"]
-size = Vector2(8, 14)
+size = Vector2(8, 12)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bq6pj"]
 size = Vector2(8, 22)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0aoe1"]
+size = Vector2(16, 24)
+
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(0, -4)
 scale = Vector2(2, 2)
+collision_mask = 6
 script = ExtResource("1_k02mk")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_dyc3l")
 animation = &"run"
-frame_progress = 0.678854
+frame_progress = 0.0672733
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 8)
+position = Vector2(0, 10)
 scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_48xwm")
 
 [node name="Weapon" type="Node2D" parent="."]
 
 [node name="Area2D" type="Area2D" parent="Weapon"]
-position = Vector2(12, 12)
+position = Vector2(12, 14)
+collision_layer = 8
+collision_mask = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="Weapon/Area2D"]
 z_index = -1
-position = Vector2(0, -6)
+position = Vector2(0, -8)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("10_u4imy")
 
@@ -91,3 +97,13 @@ one_shot = true
 
 [node name="AttackCooldownTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 10)
+shape = SubResource("RectangleShape2D_0aoe1")
+
+[node name="InvincibilityTimer" type="Timer" parent="."]
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
