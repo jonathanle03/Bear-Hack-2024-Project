@@ -3,12 +3,15 @@ extends CharacterBody2D
 @export var move_speed = 25000
 @export var attack_speed = 0.5
 @export var attack_cd = 1
+@export var invincibility_time = 0.5
 
 var facing_right: bool = true
 var prev_right: bool = true
+var prev_invincibility: float = 0
 
 func _ready():
 	$AnimatedSprite2D.play()
+	$Weapon/Area2D/CollisionShape2D.set_deferred("disabled", true)
 
 func _physics_process(delta):
 	var direction = Vector2.ZERO
@@ -72,8 +75,25 @@ func _physics_process(delta):
 		else:
 			$Weapon/Area2D.rotation_degrees -= delta / (attack_cd - attack_speed) * 140
 
+	if $InvincibilityTimer.time_left > 0 and abs($InvincibilityTimer.time_left / 0.125) < prev_invincibility:
+		if $AnimatedSprite2D.self_modulate == Color(1, 1, 1, 1):
+			$AnimatedSprite2D.set_deferred("self_modulate", Color(1, 1, 1, 0.4))
+		else:
+			$AnimatedSprite2D.set_deferred("self_modulate", Color(1, 1, 1, 1))
+
 	prev_right = facing_right
+	prev_invincibility = abs($InvincibilityTimer.time_left / 0.125)
 
 
-func _on_area_2d_body_entered(body):
-	pass # Replace with function body.
+func _on_area_2d_body_entered(_body):
+	if not $InvincibilityTimer.time_left:
+		$InvincibilityTimer.wait_time = invincibility_time
+		$InvincibilityTimer.start()
+		$CollisionShape2D.set_deferred("disabled", true)
+		$EnemyCollision/CollisionShape2D.set_deferred("disabled", true)
+
+
+func _on_invincibility_timer_timeout():
+	$CollisionShape2D.set_deferred("disabled", false)
+	$EnemyCollision/CollisionShape2D.set_deferred("disabled", false)
+	$AnimatedSprite2D.set_deferred("self_modulate", Color(1, 1, 1, 1))

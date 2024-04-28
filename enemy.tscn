@@ -47,6 +47,7 @@ animation = &"move"
 shape = SubResource("RectangleShape2D_kg6g7")
 
 [node name="DetectionRadius" type="Area2D" parent="."]
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionRadius"]
 shape = SubResource("CircleShape2D_4svod")

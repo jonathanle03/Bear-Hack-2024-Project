@@ -60,14 +60,14 @@ size = Vector2(16, 24)
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(0, -4)
 scale = Vector2(2, 2)
-collision_mask = 6
+collision_mask = 4
 script = ExtResource("1_k02mk")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_dyc3l")
 animation = &"run"
-frame_progress = 0.0672733
+frame_progress = 0.749789
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 10)
@@ -98,12 +98,16 @@ one_shot = true
 [node name="AttackCooldownTimer" type="Timer" parent="."]
 one_shot = true
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="EnemyCollision" type="Area2D" parent="."]
+collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyCollision"]
 position = Vector2(0, 10)
 shape = SubResource("RectangleShape2D_0aoe1")
 
 [node name="InvincibilityTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
 
-[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_entered" from="EnemyCollision" to="." method="_on_area_2d_body_entered"]
+[connection signal="timeout" from="InvincibilityTimer" to="." method="_on_invincibility_timer_timeout"]
